@@ -4,15 +4,19 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.development.markin.markinlauncher.R;
@@ -70,18 +74,22 @@ public class MarkinLauncherFragment extends Fragment {
     private class ActivityHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private ResolveInfo mResolveInfo;
         private TextView mNameTextView;
+        private ImageView mImageView;
 
         public ActivityHolder(View itemView) {
             super(itemView);
-            mNameTextView = (TextView) itemView;
-            mNameTextView.setOnClickListener(this);
+            mNameTextView = (TextView) itemView.findViewById(R.id.name_app_text_view);
+            mImageView = (ImageView) itemView.findViewById(R.id.icon_fpr_app_image_view);
+            itemView.setOnClickListener(this);
         }
 
             public void bindActivity (ResolveInfo resolveInfo){
                 mResolveInfo = resolveInfo;
                 PackageManager pm = getActivity().getPackageManager();
                 String appName = mResolveInfo.loadLabel(pm).toString();
+                Drawable image = mResolveInfo.loadIcon(pm);
                 mNameTextView.setText(appName);
+                mImageView.setImageDrawable(image);
             }
 
         @Override
@@ -103,7 +111,7 @@ public class MarkinLauncherFragment extends Fragment {
         @Override
         public ActivityHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
-            View view = layoutInflater.inflate(android.R.layout.simple_list_item_1, parent, false);
+            View view = layoutInflater.inflate(R.layout.list_item_activities, parent, false);
             return new ActivityHolder(view);
         }
 
